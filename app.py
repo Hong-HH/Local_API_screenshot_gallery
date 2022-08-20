@@ -9,6 +9,9 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
 from resources.register import UserRegisterResource
+from resources.login import UserLoginResource
+from resources.logout import LogoutResource
+from resources.blocklist import check_blocklist
 
 
 app = Flask(__name__)
@@ -19,12 +22,21 @@ app.config.from_object(Config)
 # JWT 토큰 만들기
 jwt = JWTManager(app)
 
+@jwt.token_in_blocklist_loader
+def check_if_token_is_revoked(jwt_header, jwt_payload) :
+    # db 에서 해당 jti 가 있는지 확인한다.
+    jti = jwt_payload['jti']
+    result = check_blocklist(jti)
+
+    return result
 
 
 api = Api(app)
 
 # resources 와 연결
-api.add_resource(UserRegisterResource, '/v1/user/register')   # 회원가입
+api.add_resource(UserRegisterResource, '/v1/user/register')     # 회원가입
+api.add_resource(UserLoginResource, '/v1/user/login')           # 로그인
+api.add_resource(LogoutResource, '/v1/user/logout')             # 로그아웃
 
 
 
