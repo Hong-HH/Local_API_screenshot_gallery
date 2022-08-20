@@ -8,21 +8,23 @@ from flask_restful import Api
 
 from flask_jwt_extended import JWTManager
 
+from resources.register import UserRegisterResource
+
 
 app = Flask(__name__)
 
 # 환경 변수 세팅
 app.config.from_object(Config)
 
-# JWT 토큰 만들기 (todo)
-
+# JWT 토큰 만들기
+jwt = JWTManager(app)
 
 
 
 api = Api(app)
 
 # resources 와 연결
-
+api.add_resource(UserRegisterResource, '/v1/user/register')   # 회원가입
 
 
 
