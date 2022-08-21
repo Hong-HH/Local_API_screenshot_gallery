@@ -51,7 +51,7 @@ class PhotoResource(Resource) :
 
                 filename = datetime.now()
                 filename = filename.isoformat()
-                filename.replace(':','_')
+                filename = filename.replace(':','_')
                 filename = str(user_id) + '__' + filename + '.jpg'
 
                 try :
