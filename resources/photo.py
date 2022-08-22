@@ -166,7 +166,6 @@ class PhotoListResource(Resource) :
         limit = request.args.get('limit')
 
         photo_id_list = []
-        tag_result = []
 
         try :
             # 클라이언트가 GET 요청하면, 이 함수에서 우리가 코드를 작성해 주면 된다.
@@ -213,6 +212,7 @@ class PhotoListResource(Resource) :
         
         try :
             for photo_id in photo_id_list :
+                count = 0
                 query = '''SELECT * FROM tag
                             where photo_id = %s; '''
                 
@@ -231,7 +231,8 @@ class PhotoListResource(Resource) :
                     record_list[i]['created_at'] = record['created_at'].isoformat()
                     i = i +1
                 
-                tag_result.append({photo_id : record_list })
+                photo_list[count]["tag"] = record_list
+                count = count +1
 
 
         # 3. 클라이언트에 보낸다. 
@@ -250,6 +251,5 @@ class PhotoListResource(Resource) :
                 print('connection does not exist')
 
         
-        final_result = [{'photo_list' : photo_list }, {'tag_list' : tag_result}]
 
-        return {'error' : 200, 'count' : len(photo_list), 'final_result' : final_result }, HTTPStatus.OK
+        return {'error' : 200, 'count' : len(photo_list), 'result' : photo_list }, HTTPStatus.OK
