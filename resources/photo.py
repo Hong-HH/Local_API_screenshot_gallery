@@ -227,9 +227,9 @@ class PhotoListResource(Resource) :
                 
 
                 if record_list is None :
-                    record_list = {}
+                    record_list = []
                 elif len(record_list) == 0 :
-                    record_list = {}
+                    record_list = []
                
 
                 ### 중요. 파이썬의 시간은, JSON으로 보내기 위해서
